@@ -7,7 +7,8 @@ function getModuleDefault(module) {
 
 var appearsBrowserified = typeof self !== 'undefined' &&
                           typeof process !== 'undefined' &&
-                          Object.prototype.toString.call(process) === '[object Object]';
+                          ( Object.prototype.toString.call(process) === '[object Object]' ||
+                            Object.prototype.toString.call(process) === '[object process]');
 
 var RouteRecognizer = appearsBrowserified ? getModuleDefault(require('route-recognizer')) : self.RouteRecognizer;
 var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xml-http-request')) :
@@ -31,6 +32,12 @@ var FakeXMLHttpRequest = appearsBrowserified ? getModuleDefault(require('fake-xm
  * }
  */
 function parseURL(url) {
+  console.log(window.location.href);
+
+  // if(document.createElement.prototype) {
+  //   return manuallyParseURL(url);
+  // }
+
   // TODO: something for when document isn't present... #yolo
   var anchor = document.createElement('a');
   anchor.href = url;
@@ -59,6 +66,20 @@ function parseURL(url) {
     fullpath: pathname + (anchor.search || '') + (anchor.hash || '')
   };
 }
+
+// function manuallyParseURL(url) {
+//   console.log(window.location.href);
+//
+//   return {
+//     host: host,
+//     protocol: anchor.protocol,
+//     search: anchor.search,
+//     hash: anchor.hash,
+//     href: anchor.href,
+//     pathname: pathname,
+//     fullpath: pathname + (anchor.search || '') + (anchor.hash || '')
+//   };
+// }
 
 
 /**
